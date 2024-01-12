@@ -14,7 +14,7 @@ namespace ProjetoMVC2024
 
             builder.Services.AddDbContext<Contexto>
             (options => options.UseMySql(
-                "server=localhost;initial catalog=CRUD_MVC_MYSQL;uid=root;pwd=car200292",
+                "server=localhost;initial catalog=CRUD_MVC_FORMULARIO;uid=root;pwd=car200292",
                 Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.34-mysql")));
 
             var app = builder.Build();
