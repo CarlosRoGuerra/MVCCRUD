@@ -3,14 +3,15 @@
 @{
     ViewData["Title"] = "Create";
 }
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<h1>Create</h1>
+<h1>Criar</h1>
 
 <h4>Formulario</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" id="meuFormulario">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
@@ -29,25 +30,144 @@
             </div>
             <div class="form-group">
                 <label asp-for="Telefone" class="control-label"></label>
-                <input asp-for="Telefone" class="form-control" />
+                <input asp-for="Telefone" class="form-control" id="Telefone" />
                 <span asp-validation-for="Telefone" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="DataNascimento" class="control-label"></label>
-                <input asp-for="DataNascimento" class="form-control" />
+                <input asp-for="DataNascimento" class="form-control" id="DataNascimento" />
                 <span asp-validation-for="DataNascimento" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Criar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar a Pagina Anterior</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script src="https://cdn.rawgit.com/digitalBush/jquery.maskedinput/1.4.1/dist/jquery.maskedinput.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Máscara para o campo de telefone
+            $("#Telefone").mask("(99) 9999-9999?9");
+
+            // Calendário para o campo de data de nascimento
+            $("#DataNascimento").datepicker({
+                dateFormat: 'dd/mm/yy',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+0"
+            });
+
+            $("#meuFormulario").validate({
+                rules: {
+                    Nome: {
+                        required: true
+                    },
+                    SobreNome: {
+                        required: true
+                    },
+                    Email: {
+                        required: true,
+                        email: true
+                    },
+                    Telefone: {
+                        required: true
+                    },
+                    DataNascimento: {
+                        required: true,
+                        dateBR: true
+                    }
+                },
+                messages: {
+                    Nome: "O campo Nome é obrigatório.",
+                    SobreNome: "O campo Sobrenome é obrigatório.",
+                    Email: {
+                        required: "O campo Email é obrigatório.",
+                        email: "Por favor, insira um endereço de e-mail válido."
+                    },
+                    Telefone: "O campo Telefone é obrigatório.",
+                    DataNascimento: {
+                        required: "O campo Data de Nascimento é obrigatório.",
+                        dateBR: "Por favor, insira uma data de nascimento válida (dd/mm/yyyy)."
+                    }
+                }
+            });
+
+            // Adiciona método de validação para data de nascimento (formato BR)
+            $.validator.addMethod("dateBR", function (value, element) {
+                return /^\d\d?\/\d\d?\/\d\d\d\d$/.test(value);
+            }, "Por favor, insira uma data de nascimento válida (dd/mm/yyyy).");
+
+            $("#meuFormulario").submit(function (event) {
+                if (!validarFormulario()) {
+                    event.preventDefault();
+                }
+            });
+
+            function validarFormulario() {
+                var isValid = true;
+
+                // Validação do campo Nome
+                var nome = $("#Nome").val();
+                if (!nome) {
+                    $("#Nome").next(".text-danger").text("O campo Nome é obrigatório.");
+                    isValid = false;
+                } else {
+                    $("#Nome").next(".text-danger").text("");
+                }
+
+                var sobreNome = $("#SobreNome").val();
+                if (!sobreNome || !isValidSobreNome(sobreNome)) {
+                    $("#SobreNome").next(".text-danger").text("O campo SobreNome é obrigatório.");
+                    isValid = false;
+                } else {
+                    $("#SobreNome").next(".text-danger").text("");
+                }
+
+                // Validação do campo Email
+                var email = $("#Email").val();
+                if (!email || !isValidEmail(email)) {
+                    $("#Email").next(".text-danger").text("Por favor, insira um endereço de e-mail válido.");
+                    isValid = false;
+                } else {
+                    $("#Email").next(".text-danger").text("");
+                }
+
+                // Validação do campo Telefone
+                var telefone = $("#Telefone").val();
+                if (!telefone || !isValidTelefone(telefone)) {
+                    $("#Telefone").next(".text-danger").text("Por favor, insira um número de telefone válido com DDD.");
+                    isValid = false;
+                } else {
+                    $("#Telefone").next(".text-danger").text("");
+                }
+
+                // Validação do campo Data de Nascimento
+                var dataNascimento = $("#DataNascimento").val();
+                if (!dataNascimento || !isValidDataNascimento(dataNascimento)) {
+                    $("#DataNascimento").next(".text-danger").text("Por favor, insira uma data de nascimento válida (dd/mm/yyyy).");
+                    isValid = false;
+                } else {
+                    $("#DataNascimento").next(".text-danger").text("");
+                }
+
+                return isValid;
+            }
+        });
+    </script>
 }
