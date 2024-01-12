@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjetoMVC2024")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41c918a50304c06d4d34740d59a74c388210d26c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+13c0113f92f0ea9be6cf654822b94e92d0ab8676")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjetoMVC2024")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjetoMVC2024")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
